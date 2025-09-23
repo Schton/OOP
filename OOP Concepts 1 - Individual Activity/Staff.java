@@ -1,36 +1,22 @@
-public class Staff extends School{
-
-    private String id;
-    private String fname;
-    private String lname;
+public class Staff extends Person {
     private String department;
-    private String email;
 
-    public void setDetails(String id, String fname, String lname, String department, String email){
-        this.id = id;
-        this.fname = fname;
-        this.lname = lname;
+    public Staff(String schoolID, String firstName, String lastName, String email, String department) {
+        super(schoolID, firstName, lastName, email);
         this.department = department;
-        this.email = email;
     }
 
-    public String getId(String id){
-        return id;
-    }
-
-    public String getFname(String fname){
-        return fname;
-    }
-
-    public String getLname(String lname){
-        return lname;
-    }
-
-    public String getDepartment(String department){
+    public String getDepartment() {
         return department;
     }
 
-    public String getEmail(String email){
-        return email;
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    @Override
+    public void display() {
+        super.display();
+        System.out.println("Department: " + department);
     }
 }
