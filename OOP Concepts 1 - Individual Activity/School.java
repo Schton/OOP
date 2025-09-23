@@ -1,101 +1,182 @@
 import java.util.*;
-import
 
 public class School {
-    private static Map<String, Student> students = new HashMap<>();
-    private static Map<String, Staff> staffMembers = new HashMap<>();
+    private Map<String, Student> students = new HashMap<>();
+    private Map<String, Staff> staff = new HashMap<>();
+    private Scanner scanner = new Scanner(System.in);
 
-    public static void addStaff(Scanner scanner) {
-        System.out.print("Enter Staff ID: ");
+    public void run() {
+        int choice;
+        do {
+            System.out.println("\n--- School Record System ---");
+            System.out.println("1. Add Student");
+            System.out.println("2. Add Staff");
+            System.out.println("3. View All Students");
+            System.out.println("4. View All Staff");
+            System.out.println("5. View Single Record");
+            System.out.println("6. Update Record");
+            System.out.println("7. Delete Record");
+            System.out.println("0. Exit");
+            System.out.print("Enter choice: ");
+
+            choice = getIntInput("");
+
+            switch (choice) {
+                case 1: 
+                    addStudent(); 
+                    break;
+                case 2: 
+                    addStaff(); 
+                    break;
+                case 3: 
+                    viewAllStudents(); 
+                    break;
+                case 4: 
+                    viewAllStaff(); 
+                    break;
+                case 5: 
+                    viewSingleRecord(); 
+                    break;
+                case 6: 
+                    updateRecord(); 
+                    break;
+                case 7: 
+                    deleteRecord(); 
+                    break;
+                case 0: 
+                    System.out.println("Exiting..."); 
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+                    break;
+            }
+        } while (choice != 0);
+    }
+
+    private void addStudent() {
+        System.out.print("Enter School ID: ");
         String id = scanner.nextLine();
-        System.out.print("Enter First Name: ");
-        String firstName = scanner.nextLine();
-        System.out.print("Enter Last Name: ");
-        String lastName = scanner.nextLine();
-        System.out.print("Enter Email: ");
+
+        if (students.containsKey(id) || staff.containsKey(id)) {
+            System.out.println("Error: Record with this School ID already exists.");
+            return;
+        }
+
+        System.out.print("First Name: ");
+        String first = scanner.nextLine();
+        System.out.print("Last Name: ");
+        String last = scanner.nextLine();
+        System.out.print("USC Email: ");
         String email = scanner.nextLine();
-        System.out.print("Enter Department: ");
-        String department = scanner.nextLine();
+        System.out.print("Course: ");
+        String course = scanner.nextLine();
+        int year = getIntInput("Year: ");
 
-        Staff staff = new Staff();
-        staff.setDetails(id, firstName, lastName, email, department);
-        staffMembers.put(id, staff);
-        System.out.println("Staff added successfully!");
+        Student s = new Student(id, first, last, email, course, year);
+        students.put(id, s);
+        System.out.println("Student added.");
     }
 
-    // Display all students
-    public static void displayAllStudents() {
+    private void addStaff() {
+        System.out.print("Enter School ID: ");
+        String id = scanner.nextLine();
+
+        if (students.containsKey(id) || staff.containsKey(id)) {
+            System.out.println("Error: Record with this School ID already exists.");
+            return;
+        }
+
+        System.out.print("First Name: ");
+        String first = scanner.nextLine();
+        System.out.print("Last Name: ");
+        String last = scanner.nextLine();
+        System.out.print("USC Email: ");
+        String email = scanner.nextLine();
+        System.out.print("Department: ");
+        String dept = scanner.nextLine();
+
+        Staff s = new Staff(id, first, last, email, dept);
+        staff.put(id, s);
+        System.out.println("Staff added.");
+    }
+
+    private void viewAllStudents() {
         if (students.isEmpty()) {
-            System.out.println("No students to display.");
-        } else {
-            for (Student student : students.values()) {
-                student.displayDetails();
-                System.out.println("-----------");
-            }
+            System.out.println("No students found.");
+            return;
+        }
+        for (Student s : students.values()) {
+            s.display();
+            System.out.println("-------------------");
         }
     }
 
-    // Display all staff
-    public static void displayAllStaff() {
-        if (staffMembers.isEmpty()) {
-            System.out.println("No staff to display.");
-        } else {
-            for (Staff staff : staffMembers.values()) {
-                staff.displayDetails();
-                System.out.println("-----------");
-            }
+    private void viewAllStaff() {
+        if (staff.isEmpty()) {
+            System.out.println("No staff found.");
+            return;
+        }
+        for (Staff s : staff.values()) {
+            s.display();
+            System.out.println("-------------------");
         }
     }
 
-    // Update student
-    public static void updateStudent(Scanner scanner) {
-        System.out.print("Enter Student ID to update: ");
+    private void viewSingleRecord() {
+        System.out.print("Enter School ID: ");
         String id = scanner.nextLine();
         if (students.containsKey(id)) {
-            Student student = students.get(id);
-            System.out.print("Enter new first name: ");
-            student.setDetails(id, scanner.nextLine(), student.getLastName(), student.getEmail(), student.getCourse(), student.getYear());
-            System.out.println("Student updated successfully!");
+            students.get(id).display();
+        } else if (staff.containsKey(id)) {
+            staff.get(id).display();
         } else {
-            System.out.println("Student not found!");
+            System.out.println("Record not found.");
         }
     }
 
-    // Update staff
-    public static void updateStaff(Scanner scanner) {
-        System.out.print("Enter Staff ID to update: ");
+    private void updateRecord() {
+        System.out.print("Enter School ID to update: ");
         String id = scanner.nextLine();
-        if (staffMembers.containsKey(id)) {
-            Staff staff = staffMembers.get(id);
-            System.out.print("Enter new first name: ");
-            staff.setDetails(id, scanner.nextLine(), staff.getLastName(), staff.getEmail(), staff.getDepartment());
-            System.out.println("Staff updated successfully!");
-        } else {
-            System.out.println("Staff not found!");
-        }
-    }
 
-    // Delete student
-    public static void deleteStudent(Scanner scanner) {
-        System.out.print("Enter Student ID to delete: ");
-        String id = scanner.nextLine();
         if (students.containsKey(id)) {
-            students.remove(id);
-            System.out.println("Student deleted successfully!");
+            Student s = students.get(id);
+            System.out.print("New First Name: "); s.setFirstName(scanner.nextLine());
+            System.out.print("New Last Name: "); s.setLastName(scanner.nextLine());
+            System.out.print("New Email: "); s.setEmail(scanner.nextLine());
+            System.out.print("New Course: "); s.setCourse(scanner.nextLine());
+            s.setYear(getIntInput("New Year: "));
+            System.out.println("Student updated.");
+        } else if (staff.containsKey(id)) {
+            Staff s = staff.get(id);
+            System.out.print("New First Name: "); s.setFirstName(scanner.nextLine());
+            System.out.print("New Last Name: "); s.setLastName(scanner.nextLine());
+            System.out.print("New Email: "); s.setEmail(scanner.nextLine());
+            System.out.print("New Department: "); s.setDepartment(scanner.nextLine());
+            System.out.println("Staff updated.");
         } else {
-            System.out.println("Student not found!");
+            System.out.println("Record not found.");
         }
     }
 
-    // Delete staff
-    public static void deleteStaff(Scanner scanner) {
-        System.out.print("Enter Staff ID to delete: ");
+    private void deleteRecord() {
+        System.out.print("Enter School ID to delete: ");
         String id = scanner.nextLine();
-        if (staffMembers.containsKey(id)) {
-            staffMembers.remove(id);
-            System.out.println("Staff deleted successfully!");
+        if (students.remove(id) != null || staff.remove(id) != null) {
+            System.out.println("Record deleted.");
         } else {
-            System.out.println("Staff not found!");
+            System.out.println("Record not found.");
+        }
+    }
+
+    private int getIntInput(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine();
+            try {
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid number. Please try again.");
+            }
         }
     }
 }
