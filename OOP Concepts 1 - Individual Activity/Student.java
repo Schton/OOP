@@ -1,44 +1,33 @@
-public class Student extends School{
-
-    private String id;
-    private String fname;
-    private String lname;
+public class Student extends Person {
     private String course;
     private int year;
-    private String email;
 
-    public void setDetails(String id, String fname, String lname, String course, int year, String email){
-        this.id = id;
-        this.fname = fname;
-        this.lname = lname;
+    public Student(String schoolID, String firstName, String lastName, String email, String course, int year) {
+        super(schoolID, firstName, lastName, email);
         this.course = course;
         this.year = year;
-        this.email = email;
     }
 
-    public String getId(String id){
-        return id;
-    }
-
-    public String getFname(String fname){
-        return fname;
-    }
-
-    public String getLname(String lname){
-        return lname;
-    }
-
-    public String getCourse(String course){
+    public String getCourse() {
         return course;
     }
 
-    public int getYear(int year){
+    public int getYear() {
         return year;
     }
 
-    public String getEmail(String email){
-        return email;
+    public void setCourse(String course) {
+        this.course = course;
     }
 
+    public void setYear(int year) {
+        this.year = year;
+    }
 
+    @Override
+    public void display() {
+        super.display();
+        System.out.println("Course: " + course);
+        System.out.println("Year: " + year);
+    }
 }
